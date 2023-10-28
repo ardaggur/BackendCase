@@ -6,6 +6,7 @@ import com.example.trendyolBackendCase.entity.*;
 import com.example.trendyolBackendCase.repository.DefaultItemVasItemRepository;
 import com.example.trendyolBackendCase.repository.ItemRepository;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,11 +16,11 @@ import java.util.Optional;
 @Service
 @NoArgsConstructor
 public class CartService {
-
+   @Autowired
    ItemRepository itemRepository;
-
+   @Autowired
    DefaultItemVasItemRepository defaultItemVasItemRepository;
-
+   @Autowired
    PromotionService promotionService;
 
    public boolean isCartValidToAddItem(Item item)
@@ -69,11 +70,12 @@ public class CartService {
          itemDTO.setPrice(item.getPrice());
          itemDTO.setSellerId(item.getSellerId());
          itemDTO.setQuantity(item.getQuantity());
+         itemDTO.setCategoryId(item.getCategoryId());
 
-         List<VasItem> vasItems = new ArrayList<>();
          Optional<List<DefaultItemVasItem>> defaultItemVasItemsOptional = defaultItemVasItemRepository.findAllByDefaultItemId(item.getId());
          List<DefaultItemVasItem> defaultItemVasItems = defaultItemVasItemsOptional.get();
          List<Integer> vasItemIds = new ArrayList<>();
+
          for(DefaultItemVasItem defaultItemVasItem : defaultItemVasItems)
          {
             vasItemIds.add(defaultItemVasItem.getVasItemId());

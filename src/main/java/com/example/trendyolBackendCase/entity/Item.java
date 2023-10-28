@@ -1,22 +1,17 @@
 package com.example.trendyolBackendCase.entity;
 
 import jakarta.persistence.*;
-import lombok.Generated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "item")
-public abstract class Item {
+public class Item {
 
     public static final int MAX_ITEM_COUNT = 10;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
     @Column
@@ -36,4 +31,7 @@ public abstract class Item {
         this.quantity = quantity;
     }
 
+    public Item() {
+
+    }
 }

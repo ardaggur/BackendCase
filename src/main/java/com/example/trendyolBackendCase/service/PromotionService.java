@@ -4,6 +4,7 @@ import com.example.trendyolBackendCase.entity.*;
 import com.example.trendyolBackendCase.repository.ItemRepository;
 import com.example.trendyolBackendCase.repository.PromotionRepository;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 @NoArgsConstructor
 public class PromotionService {
-
+    @Autowired
     PromotionRepository promotionRepository;
+    @Autowired
     ItemRepository itemRepository;
+    @Autowired
     CartService cartService;
 
     public boolean isSameSellerPromotionApplicable() {

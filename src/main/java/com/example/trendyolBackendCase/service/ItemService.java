@@ -15,12 +15,11 @@ import java.util.Optional;
 @Service
 @NoArgsConstructor
 public class ItemService {
-
-
+    @Autowired
     ItemRepository itemRepository;
-
+    @Autowired
     CartService cartService;
-
+    @Autowired
     DefaultItemVasItemRepository defaultItemVasItemRepository;
 
     public boolean isItemValidToAdd(Item item)
@@ -70,11 +69,16 @@ public class ItemService {
         return false;
     }
 
-    public Boolean addVasItemToItem(DefaultItemVasItemDTO defaultItemVasItemDTO) {        //TODO bunu tekrar oku
+    public Boolean addVasItemToItem(DefaultItemVasItemDTO defaultItemVasItemDTO) {
 
         Optional<Item> defaultItemOptional = itemRepository.findById(defaultItemVasItemDTO.getItemId());
         if(defaultItemOptional.isEmpty())
         {
+            return false;
+        }
+        Optional<Item> vasItemOptional = itemRepository.findById(defaultItemVasItemDTO.getVasItemId());
+        Item vasItem = vasItemOptional.get();
+        if(vasItem.getPrice() > defaultItemOptional.get().getPrice()){
             return false;
         }
         else{

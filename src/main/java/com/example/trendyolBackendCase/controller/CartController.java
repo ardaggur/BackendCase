@@ -17,13 +17,13 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @DeleteMapping//TODO
+    @DeleteMapping("/resetCart")
     public ResponseEntity<Boolean> resetCart()
     {
         return new ResponseEntity<>(cartService.resetCart(), HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping
+    @GetMapping("/displayCart")
     public ResponseEntity<CartDTO> displayCart()
     {
         return new ResponseEntity<>(cartService.displayCart() ,HttpStatus.CREATED);

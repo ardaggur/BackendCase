@@ -2,7 +2,6 @@ package com.example.trendyolBackendCase.controller;
 
 import com.example.trendyolBackendCase.dto.DefaultItemVasItemDTO;
 import com.example.trendyolBackendCase.entity.Item;
-import com.example.trendyolBackendCase.entity.VasItem;
 import com.example.trendyolBackendCase.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,20 +15,20 @@ public class ItemController {
     @Autowired
     ItemService itemService;
 
-    @PostMapping()
+    @PostMapping("/addVasItemToItem")
     public ResponseEntity<Boolean> addVasItemToItem(@RequestBody DefaultItemVasItemDTO defaultItemVasItemDTO)
     {
         return new ResponseEntity<>(itemService.addVasItemToItem(defaultItemVasItemDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping("/addItem")
     public ResponseEntity<Boolean> addItem(@RequestBody Item item)
     {
         return new ResponseEntity<>(itemService.addItemToCart(item), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> removeItem(@PathVariable("id") int itemId) {
+    @DeleteMapping("/removeItem/{itemId}")
+    public ResponseEntity<Boolean> removeItem(@PathVariable("itemId") int itemId) {
         return new ResponseEntity<>(itemService.removeItemFromCart(itemId), HttpStatus.NO_CONTENT);
     }
 
