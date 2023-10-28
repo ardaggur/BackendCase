@@ -1,4 +1,4 @@
-package com.example.trendyolBackendCase;
+package com.example.trendyolBackendCase.itemServiceTest;
 
 import com.example.trendyolBackendCase.entity.DefaultItem;
 import com.example.trendyolBackendCase.entity.DigitalItem;

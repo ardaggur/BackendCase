@@ -23,6 +23,7 @@ public class CartService {
    @Autowired
    PromotionService promotionService;
 
+
    public boolean isCartValidToAddItem(Item item)
    {
       return (itemRepository.count() < Cart.MAX_DISTINCT_ITEM_COUNT &&
@@ -48,6 +49,7 @@ public class CartService {
    {
       try{
          itemRepository.deleteAll();
+         defaultItemVasItemRepository.deleteAll();
          return true;
       }catch(Exception e)
       {

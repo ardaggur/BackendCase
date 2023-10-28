@@ -31,7 +31,7 @@ public class PromotionService {
     }
 
     public double getSameSellerPromotionDiscountAmount() {
-        return isSameSellerPromotionApplicable() ? cartService.getTotalAmountOfCart() - (cartService.getTotalAmountOfCart() * SameSellerPromotion.DISCOUNT_RATIO): cartService.getTotalAmountOfCart();
+        return isSameSellerPromotionApplicable() ? cartService.getTotalAmountOfCart() - (cartService.getTotalAmountOfCart() * SameSellerPromotion.DISCOUNT_RATIO): 0.0;
     }
 
     public Boolean isCategoryPromotionApplicable() {
@@ -42,27 +42,25 @@ public class PromotionService {
     public double getCategoryPromotionDiscountAmount() {
         if (isCategoryPromotionApplicable()) {
             List<Item> items = itemRepository.findAll();
-            double totalDiscountedPrice = items.stream()
+            double totalDiscountAmount = items.stream()
                     .mapToDouble(item -> {
                         if (item.getCategoryId() == CategoryPromotion.TARGET_CATEGORY_ID) {
-                            double originalPrice = item.getPrice();
-                            double discountedPrice = originalPrice * CategoryPromotion.DISCOUNT_RATIO;
-                            item.setPrice(discountedPrice);
-                            return discountedPrice;
+                            double originalPrice = item.getPrice()* item.getQuantity();
+                            return originalPrice - (originalPrice * CategoryPromotion.DISCOUNT_RATIO);
                         } else {
-                            return item.getPrice();
+                            return 0;
                         }
                     })
                     .sum();
-            return cartService.getTotalAmountOfCart() - totalDiscountedPrice;
+            return totalDiscountAmount;
         } else {
-            return cartService.getTotalAmountOfCart();
+            return 0.0;
         }
     }
 
     public boolean isTotalPricePromotionApplicable()
     {
-        return cartService.getTotalAmountOfCart() > 0;
+        return cartService.getTotalAmountOfCart() > TotalPricePromotion.MIN_AMOUNT_TO_APPLY_PROMOTION;
     }
 
     public double getTotalPricePromotionDiscountAmount() {
@@ -82,12 +80,15 @@ public class PromotionService {
 
             return discount;
         } else {
-            return cartService.getTotalAmountOfCart();
+            return 0.0;
         }
     }
 
     public double getBestPromotionDiscount() {
-        return Math.max(getTotalPricePromotionDiscountAmount(), Math.max(getCategoryPromotionDiscountAmount(), getSameSellerPromotionDiscountAmount()));
+        return Math.max(
+                getTotalPricePromotionDiscountAmount(),
+                Math.max(getCategoryPromotionDiscountAmount(), getSameSellerPromotionDiscountAmount())
+        );
     }
 
     public int getBestPromotionId()
