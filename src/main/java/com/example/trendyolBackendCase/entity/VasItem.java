@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@NoArgsConstructor
 public class VasItem extends Item{
 
     public static final int VAS_ITEM_CATEGORY_ID = 3242;
