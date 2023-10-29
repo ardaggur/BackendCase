@@ -35,9 +35,9 @@ Postman ile API Testi:
 * DataGrip: Veritabanı yönetimi ve sorgu çalıştırma için kullanıldı.
 
 ## API Endpointleri 
-* http://localhost:8080/items/addItem
-* http://localhost:8080/items/removeItem/{itemId}
-* http://localhost:8080/items/addVasItemToItem
-* http://localhost:8080/cart/resetCart
-* http://localhost:8080/cart/displayCart
+* http://localhost:8080/items/addItem -> cart'a item ekleme işlemi
+* http://localhost:8080/items/removeItem/{itemId} -> cart'tan item çıkartma işlemi
+* http://localhost:8080/items/addVasItemToItem -> default item'a vas item ekleme işlemi
+* http://localhost:8080/cart/resetCart -> cart'ı sıfırlama işlemi
+* http://localhost:8080/cart/displayCart -> cart'ın özelliklerini gösterme işlemi
 
