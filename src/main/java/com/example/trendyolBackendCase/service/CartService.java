@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @NoArgsConstructor
@@ -22,7 +23,6 @@ public class CartService {
    DefaultItemVasItemRepository defaultItemVasItemRepository;
    @Autowired
    PromotionService promotionService;
-
 
    public boolean isCartValidToAddItem(Item item)
    {
@@ -45,47 +45,20 @@ public class CartService {
               .sum();
    }
 
-   public Boolean resetCart()
-   {
-      try{
+   public Boolean resetCart() {
+      try {
          itemRepository.deleteAll();
          defaultItemVasItemRepository.deleteAll();
          return true;
-      }catch(Exception e)
-      {
+      } catch (Exception e) {
          e.printStackTrace();
+         return false;
       }
-      return false;
    }
 
-   public CartDTO displayCart()
-   {
+   public CartDTO displayCart() {
       CartDTO cartDTO = new CartDTO();
-      //get all items
-      List<Item> items = itemRepository.findAll();
-
-      List<ItemDTO> itemDTOs = new ArrayList<>();
-      for(Item item : items)
-      {
-         ItemDTO itemDTO = new ItemDTO();
-         itemDTO.setItemId(item.getId());
-         itemDTO.setPrice(item.getPrice());
-         itemDTO.setSellerId(item.getSellerId());
-         itemDTO.setQuantity(item.getQuantity());
-         itemDTO.setCategoryId(item.getCategoryId());
-
-         Optional<List<DefaultItemVasItem>> defaultItemVasItemsOptional = defaultItemVasItemRepository.findAllByDefaultItemId(item.getId());
-         List<DefaultItemVasItem> defaultItemVasItems = defaultItemVasItemsOptional.get();
-         List<Integer> vasItemIds = new ArrayList<>();
-
-         for(DefaultItemVasItem defaultItemVasItem : defaultItemVasItems)
-         {
-            vasItemIds.add(defaultItemVasItem.getVasItemId());
-         }
-         List<Item> vasItemsOptional = itemRepository.findAllById(vasItemIds);
-         itemDTO.setVasItems(vasItemsOptional);
-         itemDTOs.add(itemDTO);
-      }
+      List<ItemDTO> itemDTOs = mapItemsToItemDTOs(itemRepository.findAll());
 
       cartDTO.setItemDTO(itemDTOs);
       cartDTO.setTotalPrice(getTotalAmountOfCart());
@@ -93,7 +66,35 @@ public class CartService {
       cartDTO.setAppliedPromotionId(promotionService.getBestPromotionId());
 
       return cartDTO;
-
    }
+
+   public List<ItemDTO> mapItemsToItemDTOs(List<Item> items) {
+      return items.stream()
+              .map(this::mapItemToItemDTO)
+              .collect(Collectors.toList());
+   }
+
+   public ItemDTO mapItemToItemDTO(Item item) {
+      ItemDTO itemDTO = new ItemDTO();
+      itemDTO.setItemId(item.getId());
+      itemDTO.setPrice(item.getPrice());
+      itemDTO.setSellerId(item.getSellerId());
+      itemDTO.setQuantity(item.getQuantity());
+      itemDTO.setCategoryId(item.getCategoryId());
+
+      List<Integer> vasItemIds = getDefaultItemVasItemIds(item.getId());
+      itemDTO.setVasItems(itemRepository.findAllById(vasItemIds));
+
+      return itemDTO;
+   }
+
+   public List<Integer> getDefaultItemVasItemIds(Integer defaultItemId) {
+      return defaultItemVasItemRepository.findAllByDefaultItemId(defaultItemId)
+              .orElse(new ArrayList<>())
+              .stream()
+              .map(DefaultItemVasItem::getVasItemId)
+              .collect(Collectors.toList());
+   }
+
 
 }

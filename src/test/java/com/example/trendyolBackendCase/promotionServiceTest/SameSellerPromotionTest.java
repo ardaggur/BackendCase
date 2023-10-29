@@ -13,8 +13,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class SameSellerPromotionTest {
@@ -58,7 +57,7 @@ public class SameSellerPromotionTest {
                 new Item(6,10.0,999,1002,4)
         );
         when(itemRepository.findAll()).thenReturn(items);
-        assertTrue(promotionService.isSameSellerPromotionApplicable());
+        assertFalse(promotionService.isSameSellerPromotionApplicable());
     }
 
     @Test

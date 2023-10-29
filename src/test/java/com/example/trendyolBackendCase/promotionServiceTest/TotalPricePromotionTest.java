@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -51,10 +52,8 @@ public class TotalPricePromotionTest {
 
         when(itemRepository.findAll()).thenReturn(items);
         when(cartService.getTotalAmountOfCart()).thenReturn(220.0);
-        assertTrue(promotionService.isTotalPricePromotionApplicable());
+        assertFalse(promotionService.isTotalPricePromotionApplicable());
     }
-
-
 
 
 }

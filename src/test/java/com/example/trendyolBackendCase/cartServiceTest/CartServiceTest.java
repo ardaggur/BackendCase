@@ -1,5 +1,7 @@
 package com.example.trendyolBackendCase.cartServiceTest;
 
+import com.example.trendyolBackendCase.dto.ItemDTO;
+import com.example.trendyolBackendCase.entity.Cart;
 import com.example.trendyolBackendCase.entity.Item;
 import com.example.trendyolBackendCase.repository.DefaultItemVasItemRepository;
 import com.example.trendyolBackendCase.repository.ItemRepository;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class CartServiceTest {
+
 
     @Mock
     private ItemRepository itemRepository;
@@ -76,6 +79,38 @@ public class CartServiceTest {
         assertTrue(cartService.resetCart());
     }
 
+    @Test
+    public void testIsCartValid(){
+        when(itemRepository.count()).thenReturn(2L);
+        Item item = new Item();
+        item.setQuantity(1);
+        assertTrue(cartService.isCartValidToAddItem(item));
+    }
 
+    @Test
+    public void testInvalidCartExceedingDistinctItemCount() {
+        when(itemRepository.count()).thenReturn((long) Cart.MAX_DISTINCT_ITEM_COUNT);
+        Item item = new Item();
+        assertFalse(cartService.isCartValidToAddItem(item));
+    }
+
+    @Test
+    public void testInvalidCartExceedingTotalItemCount() {
+        when(itemRepository.count()).thenReturn(1L);
+        Item item = new Item();
+        item.setQuantity(Cart.MAX_TOTAL_ITEM_COUNT_OF_CART + 1);
+        assertFalse(cartService.isCartValidToAddItem(item));
+    }
+
+    @Test
+    public void testInvalidCartExceedingTotalAmount() {
+        when(itemRepository.count()).thenReturn(1L);
+
+        Item item = new Item();
+        item.setQuantity(1);
+        item.setPrice(Cart.MAX_TOTAL_AMOUNT_OF_CART + 1);
+
+        assertFalse(cartService.isCartValidToAddItem(item));
+    }
 
 }

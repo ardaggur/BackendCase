@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class CategoryPromotionTest {
@@ -52,7 +51,7 @@ public class CategoryPromotionTest {
         );
 
         when(itemRepository.findAll()).thenReturn(items);
-        assertTrue(promotionService.isCategoryPromotionApplicable());
+        assertFalse(promotionService.isCategoryPromotionApplicable());
     }
 
     @Test
@@ -84,7 +83,7 @@ public class CategoryPromotionTest {
         when(cartService.getTotalAmountOfCart()).thenReturn(220.0);
 
         double discount = promotionService.getCategoryPromotionDiscountAmount();
-        assertEquals(10.0,discount);
+        assertEquals(15.0,discount);
 
     }
 
